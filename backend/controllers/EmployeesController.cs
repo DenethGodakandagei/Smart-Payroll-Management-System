@@ -58,6 +58,8 @@ namespace SmartPayroll.Api.Controllers
 
             emp.FullName = dto.FullName;
             emp.Designation = dto.Designation;
+            emp.Nic = dto.Nic;           
+            emp.MemberNo = dto.MemberNo;   
             emp.BasicSalary = dto.BasicSalary;
             emp.BankAccountNo = dto.BankAccountNo;
             emp.JoiningDate = dto.JoiningDate;

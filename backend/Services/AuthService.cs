@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartPayroll.Api.Data;
 using SmartPayroll.Api.Entities;
 using SmartPayroll.Api.Utilities;
+using SmartPayroll.Api.Services;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -28,6 +29,8 @@ namespace SmartPayroll.Api.Services
             {
                 FullName = dto.FullName,
                 Email = dto.Email,
+                Nic = dto.Nic,           
+        MemberNo = dto.MemberNo, 
                 BasicSalary = dto.BasicSalary,
                 BankAccountNo = dto.BankAccountNo,
                 Designation = dto.Designation,

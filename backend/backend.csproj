@@ -29,7 +29,4 @@
   <!-- PostgreSQL EF Provider -->
   <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
 </ItemGroup>
-
-
-
 </Project>

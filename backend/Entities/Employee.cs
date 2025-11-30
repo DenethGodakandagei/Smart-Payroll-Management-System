@@ -14,6 +14,12 @@ namespace SmartPayroll.Api.Entities
         [Required, MaxLength(200)]
         public string Email { get; set; }
 
+        [MaxLength(20)]
+        public string Nic { get; set; } 
+
+        [MaxLength(50)]
+        public string MemberNo { get; set; }  
+
         public string Designation { get; set; }
 
         [Column(TypeName = "numeric")]

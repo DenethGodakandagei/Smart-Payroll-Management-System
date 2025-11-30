@@ -6,29 +6,27 @@ using SmartPayroll.Api.Middleware;
 using SmartPayroll.Api.Services;
 using System.Text;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuration
-var configuration = builder.Configuration;
+// Fix timestamp behavior for Npgsql
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-
-// Add DbContext
+// Add DbContext (Neon PostgreSQL)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add services
+// Register Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPayrollService, PayrollService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// JWT auth
-var jwtSection = configuration.GetSection("Jwt");
+// Configure JWT
+var jwtSection = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSection["Key"]);
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -46,30 +44,38 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtSection["Audience"],
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateLifetime = true
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero // Prevents token expiry delays
     };
 });
 
 var app = builder.Build();
 
-// Apply migrations at startup (optional in dev)
+// Auto apply EF migrations (IMPORTANT: works with Neon)
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate();
+    db.Database.Migrate(); // Creates tables and applies migrations automatically
 }
 
-// Middleware
+// Development tools
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// Middlewares (correct order)
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseAuthentication();
-app.UseMiddleware<AuditMiddleware>(); // simple audit logging
 app.UseAuthorization();
+
+// Optional: Your custom middleware
+app.UseMiddleware<AuditMiddleware>();
 
 app.MapControllers();
 
