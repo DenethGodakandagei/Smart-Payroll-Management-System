@@ -1,7 +1,8 @@
-// pages/attendance/index.tsx
+"use client"
+
 import { useEffect, useState } from "react";
-import api from "../../lib/api";
-import { Employee } from "../../types";
+import api from "../lib/api";
+import { Employee } from "../types";
 import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
 

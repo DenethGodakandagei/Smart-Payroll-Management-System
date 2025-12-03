@@ -1,6 +1,7 @@
-// pages/dashboard.tsx
+"use client";
 import { useEffect, useState } from "react";
 import api from "../lib/api";
+import Sidebar from "@/app/components/Sidebar";
 
 export default function Dashboard() {
   const [stats, setStats] = useState<any>(null);
@@ -11,7 +12,9 @@ export default function Dashboard() {
   },[]);
 
   return (
+    
     <div>
+      <Sidebar />
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
       <div className="grid grid-cols-3 gap-4">
         <div className="p-4 bg-white rounded shadow">Employees: --</div>

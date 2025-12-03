@@ -1,8 +1,9 @@
-// pages/employees/index.tsx
+"use client"
+
 import { useEffect, useState } from "react";
-import api from "../../lib/api";
+import api from "../lib/api";
 import Link from "next/link";
-import { Employee } from "../../types";
+import { Employee } from "../types";
 
 export default function EmployeesPage() {
   const [list, setList] = useState<Employee[]>([]);
@@ -13,7 +14,7 @@ export default function EmployeesPage() {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-semibold">Employees</h1>
-        <Link href="/employees/create"><a className="bg-blue-600 text-white px-3 py-1 rounded">Add Employee</a></Link>
+        <Link href="/employees/create" className="bg-blue-600 text-white px-3 py-1 rounded">Add Employee</Link>
       </div>
       <div className="bg-white rounded shadow overflow-hidden">
         <table className="w-full">
@@ -34,7 +35,7 @@ export default function EmployeesPage() {
                 <td className="p-2">{e.designation}</td>
                 <td className="p-2">{e.basicSalary}</td>
                 <td className="p-2">
-                  <Link href={`/employees/${e.employeeId}`}><a className="text-blue-600 mr-2">View</a></Link>
+                  <Link href={`/employees/${e.employeeId}`} className="text-blue-600 mr-2">View</Link>
                 </td>
               </tr>
             ))}

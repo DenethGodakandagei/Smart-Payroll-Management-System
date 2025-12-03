@@ -8,14 +8,13 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Fix timestamp behavior for Npgsql
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-// Add DbContext (Neon PostgreSQL)
+// DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Register Services
+// Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPayrollService, PayrollService>();
 
@@ -23,58 +22,70 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configure JWT
+// JWT
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSection["Key"]);
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidIssuer = jwtSection["Issuer"],
-        ValidateAudience = true,
-        ValidAudience = jwtSection["Audience"],
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero // Prevents token expiry delays
-    };
+	options.RequireHttpsMetadata = false;
+	options.SaveToken = true;
+	options.TokenValidationParameters = new TokenValidationParameters
+	{
+		ValidateIssuer = true,
+		ValidIssuer = jwtSection["Issuer"],
+		ValidateAudience = true,
+		ValidAudience = jwtSection["Audience"],
+		ValidateIssuerSigningKey = true,
+		IssuerSigningKey = new SymmetricSecurityKey(key),
+		ValidateLifetime = true,
+		ClockSkew = TimeSpan.Zero
+	};
+});
+
+// CORS MUST BE HERE
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowFrontend",
+		policy => policy
+			.WithOrigins("http://localhost:3000")
+			.AllowAnyMethod()
+			.AllowAnyHeader()
+			.AllowCredentials());
 });
 
 var app = builder.Build();
 
-// Auto apply EF migrations (IMPORTANT: works with Neon)
+// Auto-migrate DB
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate(); // Creates tables and applies migrations automatically
+	var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+	db.Database.Migrate();
 }
 
-// Development tools
+// Dev tools
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
 
-// Middlewares (correct order)
 if (!app.Environment.IsDevelopment())
 {
-    app.UseHttpsRedirection();
+	app.UseHttpsRedirection();
 }
+
+// CORS BEFORE authentication
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Optional: Your custom middleware
 app.UseMiddleware<AuditMiddleware>();
 
 app.MapControllers();
