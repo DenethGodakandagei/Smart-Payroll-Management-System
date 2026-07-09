@@ -8,6 +8,7 @@ import {
   UserGroupIcon,
   CalendarDaysIcon,
   CurrencyDollarIcon,
+  Cog6ToothIcon,
   ArrowRightOnRectangleIcon
 } from "@heroicons/react/24/outline";
 
@@ -19,6 +20,7 @@ export default function Sidebar() {
     { name: "Employees", icon: <UserGroupIcon className="w-5 h-5" />, href: "/employees" },
     { name: "Attendance", icon: <CalendarDaysIcon className="w-5 h-5" />, href: "/attendance" },
     { name: "Payroll", icon: <CurrencyDollarIcon className="w-5 h-5" />, href: "/payroll" },
+    { name: "Settings", icon: <Cog6ToothIcon className="w-5 h-5" />, href: "/settings" },
   ];
 
   return (
