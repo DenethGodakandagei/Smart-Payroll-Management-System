@@ -8,13 +8,15 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+// Configuration
+var configuration = builder.Configuration;
 
-// DbContext
+
+// Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Services
+// Add services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPayrollService, PayrollService>();
 
@@ -22,8 +24,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// JWT
-var jwtSection = builder.Configuration.GetSection("Jwt");
+// JWT auth
+var jwtSection = configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSection["Key"]);
 
 builder.Services.AddAuthentication(options =>
@@ -33,19 +35,18 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-	options.RequireHttpsMetadata = false;
-	options.SaveToken = true;
-	options.TokenValidationParameters = new TokenValidationParameters
-	{
-		ValidateIssuer = true,
-		ValidIssuer = jwtSection["Issuer"],
-		ValidateAudience = true,
-		ValidAudience = jwtSection["Audience"],
-		ValidateIssuerSigningKey = true,
-		IssuerSigningKey = new SymmetricSecurityKey(key),
-		ValidateLifetime = true,
-		ClockSkew = TimeSpan.Zero
-	};
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = jwtSection["Issuer"],
+        ValidateAudience = true,
+        ValidAudience = jwtSection["Audience"],
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateLifetime = true
+    };
 });
 
 // CORS MUST BE HERE
@@ -61,32 +62,23 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Auto-migrate DB
+// Apply migrations at startup (optional in dev)
 using (var scope = app.Services.CreateScope())
 {
-	var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-	db.Database.Migrate();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
 }
 
-// Dev tools
+// Middleware
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
 
-if (!app.Environment.IsDevelopment())
-{
-	app.UseHttpsRedirection();
-}
-
-// CORS BEFORE authentication
-app.UseCors("AllowFrontend");
-
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseMiddleware<AuditMiddleware>();
 
 app.MapControllers();
 

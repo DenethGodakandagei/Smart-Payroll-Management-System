@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Login from "./pages/login";
 
 export default function Home() {
   return (
-  <>
-  <Login></Login></>
+    <main className="flex min-h-screen items-center justify-center bg-gray-50">
+      <Login />
+    </main>
   );
 }
