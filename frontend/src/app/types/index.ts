@@ -10,6 +10,8 @@ export interface Employee {
   joiningDate?: string;
   roleId?: number;
   role?: Role;
+  nic?: string;
+  memberNo?: string;
 }
 export interface AttendanceDto {
   employeeId: number;
