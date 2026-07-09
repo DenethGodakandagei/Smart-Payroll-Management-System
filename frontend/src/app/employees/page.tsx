@@ -28,11 +28,11 @@ export default function EmployeesPage() {
         <div className="flex justify-between items-center mb-8 border-b border-zinc-200 pb-5">
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight text-zinc-950">Employees</h1>
-            <p className="text-zinc-500 text-sm mt-1 font-medium">Manage corporate staff details, credentials, and salaries.</p>
+            <p className="text-zinc-550 text-sm mt-1 font-medium">Manage corporate staff details, credentials, and salaries.</p>
           </div>
           <Link
             href="/employees/create"
-            className="flex items-center gap-1.5 px-5 py-2.5 bg-[#2bd97b] hover:bg-[#22c55e] text-zinc-950 text-sm font-bold rounded-full shadow-sm active:scale-[0.98] transition-all duration-150"
+            className="flex items-center gap-1.5 px-5 py-2.5 bg-[#2bd97b] hover:bg-[#22c55e] text-zinc-950 text-sm font-bold rounded-full shadow-sm active:scale-[0.98] transition-all duration-155"
           >
             <PlusIcon className="w-4 h-4 text-zinc-950 stroke-[2.5]" />
             Add Employee
@@ -50,7 +50,7 @@ export default function EmployeesPage() {
             <div className="flex flex-col items-center justify-center py-20 text-center">
               <IdentificationIcon className="w-12 h-12 text-zinc-400 mb-3" />
               <h3 className="text-zinc-800 font-bold text-base">No Employee Records</h3>
-              <p className="text-zinc-500 text-sm mt-1 max-w-xs font-medium">
+              <p className="text-zinc-550 text-xs mt-1 max-w-xs font-semibold">
                 Get started by adding your first employee to the SmartPayroll registry.
               </p>
             </div>
@@ -95,9 +95,17 @@ export default function EmployeesPage() {
                         {e.nic || "N/A"}
                       </td>
                       <td className="p-4 pr-6 text-right">
-                        <span className="text-zinc-400 text-xs font-semibold">
-                          Active
-                        </span>
+                        <div className="flex justify-end items-center gap-3">
+                          <span className="text-zinc-400 text-xs font-semibold">
+                            Active
+                          </span>
+                          <Link
+                            href={`/employees/${e.employeeId}/edit`}
+                            className="inline-flex items-center text-xs font-bold text-zinc-850 hover:text-zinc-950 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 px-3.5 py-1.5 rounded-full transition shadow-sm"
+                          >
+                            Edit
+                          </Link>
+                        </div>
                       </td>
                     </tr>
                   ))}
