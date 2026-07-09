@@ -39,5 +39,15 @@ namespace SmartPayroll.Api.Controllers
             if (att == null) return NotFound();
             return Ok(att);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var list = await _db.Attendances
+                .Include(a => a.Employee)
+                .OrderByDescending(a => a.MonthYear)
+                .ToListAsync();
+            return Ok(list);
+        }
     }
 }
