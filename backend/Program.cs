@@ -1,3 +1,5 @@
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

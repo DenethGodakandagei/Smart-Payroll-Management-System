@@ -22,7 +22,7 @@ type Form = {
 };
 
 export default function CreateEmployee() {
-  const { register, handleSubmit, reset } = useForm<Form>({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<Form>({
     defaultValues: {
       joiningDate: dayjs().format("YYYY-MM-DD"),
       basicSalary: 0,
@@ -90,93 +90,127 @@ export default function CreateEmployee() {
               <div>
                 <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Full Name</label>
                 <input
-                  {...register("fullName", { required: true })}
+                  {...register("fullName", { 
+                    required: "Full name is required",
+                    minLength: { value: 3, message: "Name must be at least 3 characters" }
+                  })}
                   placeholder="e.g. John Doe"
-                  className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition duration-200"
+                  className={`w-full bg-zinc-50 border text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none transition duration-200 ${errors.fullName ? 'border-red-400 focus:border-red-500' : 'border-zinc-200 focus:border-zinc-400 focus:bg-white'}`}
                 />
+                {errors.fullName && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.fullName.message}</p>}
               </div>
 
               {/* Member No */}
               <div>
                 <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Member Number</label>
                 <input
-                  {...register("memberNo", { required: true })}
+                  {...register("memberNo", { 
+                    required: "Member number is required"
+                  })}
                   placeholder="e.g. SPM-025"
-                  className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition duration-200"
+                  className={`w-full bg-zinc-50 border text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none transition duration-200 ${errors.memberNo ? 'border-red-400 focus:border-red-500' : 'border-zinc-200 focus:border-zinc-400 focus:bg-white'}`}
                 />
+                {errors.memberNo && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.memberNo.message}</p>}
               </div>
 
               {/* Email */}
               <div>
                 <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Email Address</label>
                 <input
-                  {...register("email", { required: true })}
+                  {...register("email", { 
+                    required: "Email is required",
+                    pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: "Please enter a valid email address" }
+                  })}
                   type="email"
                   placeholder="john.doe@smartpayroll.com"
-                  className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition duration-200"
+                  className={`w-full bg-zinc-50 border text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none transition duration-200 ${errors.email ? 'border-red-400 focus:border-red-500' : 'border-zinc-200 focus:border-zinc-400 focus:bg-white'}`}
                 />
+                {errors.email && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.email.message}</p>}
               </div>
 
               {/* Password */}
               <div>
                 <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Password</label>
                 <input
-                  {...register("password", { required: true })}
+                  {...register("password", { 
+                    required: "Password is required",
+                    minLength: { value: 4, message: "Password must be at least 4 characters" }
+                  })}
                   type="password"
                   placeholder="••••••••"
-                  className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition duration-200"
+                  className={`w-full bg-zinc-50 border text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none transition duration-200 ${errors.password ? 'border-red-400 focus:border-red-500' : 'border-zinc-200 focus:border-zinc-400 focus:bg-white'}`}
                 />
+                {errors.password && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.password.message}</p>}
               </div>
 
               {/* NIC */}
               <div>
                 <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">National Identity Card (NIC)</label>
                 <input
-                  {...register("nic", { required: true })}
+                  {...register("nic", { 
+                    required: "NIC is required",
+                    pattern: { value: /^([0-9]{9}[vVxX]|[0-9]{12})$/, message: "Enter a valid NIC (e.g., 957654321V or 200322912427)" }
+                  })}
                   placeholder="e.g. 199512345678"
-                  className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition duration-200"
+                  className={`w-full bg-zinc-50 border text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none transition duration-200 ${errors.nic ? 'border-red-400 focus:border-red-500' : 'border-zinc-200 focus:border-zinc-400 focus:bg-white'}`}
                 />
+                {errors.nic && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.nic.message}</p>}
               </div>
 
               {/* Designation */}
               <div>
                 <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Designation / Role Title</label>
                 <input
-                  {...register("designation")}
+                  {...register("designation", {
+                    required: "Designation is required"
+                  })}
                   placeholder="e.g. Software Engineer"
-                  className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition duration-200"
+                  className={`w-full bg-zinc-50 border text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none transition duration-200 ${errors.designation ? 'border-red-400 focus:border-red-500' : 'border-zinc-200 focus:border-zinc-400 focus:bg-white'}`}
                 />
+                {errors.designation && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.designation.message}</p>}
               </div>
 
               {/* Basic Salary */}
               <div>
                 <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Basic Salary (LKR)</label>
                 <input
-                  {...register("basicSalary", { valueAsNumber: true })}
+                  {...register("basicSalary", { 
+                    required: "Basic salary is required",
+                    valueAsNumber: true,
+                    min: { value: 1, message: "Salary must be greater than 0" }
+                  })}
                   type="number"
                   placeholder="e.g. 75000"
-                  className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition duration-200"
+                  className={`w-full bg-zinc-50 border text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none transition duration-200 ${errors.basicSalary ? 'border-red-400 focus:border-red-500' : 'border-zinc-200 focus:border-zinc-400 focus:bg-white'}`}
                 />
+                {errors.basicSalary && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.basicSalary.message}</p>}
               </div>
 
               {/* Bank Account No */}
               <div>
                 <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Bank Account Number</label>
                 <input
-                  {...register("bankAccountNo")}
+                  {...register("bankAccountNo", {
+                    required: "Bank account is required",
+                    minLength: { value: 8, message: "Account number must be at least 8 digits" }
+                  })}
                   placeholder="e.g. 8012345678"
-                  className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition duration-200"
+                  className={`w-full bg-zinc-50 border text-zinc-900 placeholder-zinc-400 rounded-2xl px-4 py-3 text-sm focus:outline-none transition duration-200 ${errors.bankAccountNo ? 'border-red-400 focus:border-red-500' : 'border-zinc-200 focus:border-zinc-400 focus:bg-white'}`}
                 />
+                {errors.bankAccountNo && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.bankAccountNo.message}</p>}
               </div>
 
               {/* Joining Date */}
               <div>
                 <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Joining Date</label>
                 <input
-                  {...register("joiningDate")}
+                  {...register("joiningDate", {
+                    required: "Joining date is required"
+                  })}
                   type="date"
-                  className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition duration-200 [color-scheme:light]"
+                  className={`w-full bg-zinc-50 border text-zinc-900 rounded-2xl px-4 py-3 text-sm focus:outline-none transition duration-200 [color-scheme:light] ${errors.joiningDate ? 'border-red-400 focus:border-red-500' : 'border-zinc-200 focus:border-zinc-400 focus:bg-white'}`}
                 />
+                {errors.joiningDate && <p className="text-red-500 text-xs mt-1 font-semibold">{errors.joiningDate.message}</p>}
               </div>
 
               {/* Role ID Dropdown */}
