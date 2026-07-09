@@ -3,6 +3,7 @@
 import { useState } from "react";
 import api from "../lib/api";
 import dayjs from "dayjs";
+import Link from "next/link";
 import Sidebar from "@/app/components/Sidebar";
 import { DocumentTextIcon, CalendarIcon, PlayIcon, IdentificationIcon } from "@heroicons/react/24/outline";
 
@@ -37,7 +38,7 @@ export default function PayrollPage() {
         <div className="flex justify-between items-center mb-8 border-b border-zinc-200 pb-5">
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight text-zinc-950">Payroll Processing</h1>
-            <p className="text-zinc-500 text-sm mt-1 font-medium">Calculate salaries, apply taxes, EPF/ETF, and issue payslips.</p>
+            <p className="text-zinc-550 text-sm mt-1 font-medium">Calculate salaries, apply taxes, EPF/ETF, and issue payslips.</p>
           </div>
         </div>
 
@@ -96,7 +97,7 @@ export default function PayrollPage() {
                 <div className="flex flex-col items-center justify-center py-24 text-center">
                   <DocumentTextIcon className="w-12 h-12 text-zinc-400 mb-3" />
                   <h4 className="text-zinc-800 font-bold text-sm">No Payrolls Calculated Yet</h4>
-                  <p className="text-zinc-500 text-xs mt-1 max-w-xs font-semibold">
+                  <p className="text-zinc-550 text-xs mt-1 max-w-xs font-semibold">
                     Choose a month and click "Generate All Payroll" to run calculations for the cycle.
                   </p>
                 </div>
@@ -107,7 +108,8 @@ export default function PayrollPage() {
                       <tr className="border-b border-zinc-200/80 bg-zinc-50/50 text-xs font-bold text-zinc-500 uppercase tracking-wider">
                         <th className="p-4 pl-6">Employee</th>
                         <th className="p-4">Month</th>
-                        <th className="p-4 text-right pr-6">Net Salary</th>
+                        <th className="p-4 text-right">Net Salary</th>
+                        <th className="p-4 pr-6 text-right">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-100">
@@ -124,10 +126,18 @@ export default function PayrollPage() {
                             </div>
                           </td>
                           <td className="p-4 font-mono text-zinc-555 text-xs font-semibold">
-                            {dayjs(r.month).format("MMMM YYYY")}
+                            {dayjs(r.monthYear).format("MMMM YYYY")}
                           </td>
-                          <td className="p-4 pr-6 text-right font-mono font-extrabold text-emerald-600">
+                          <td className="p-4 text-right font-mono font-extrabold text-emerald-600">
                             LKR {Number(r.netSalary).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </td>
+                          <td className="p-4 pr-6 text-right">
+                            <Link 
+                              href={`/payroll/${r.payrollId}`} 
+                              className="inline-flex items-center text-xs font-bold text-zinc-850 hover:text-zinc-950 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 px-3.5 py-1.5 rounded-full transition shadow-sm"
+                            >
+                              View Payslip
+                            </Link>
                           </td>
                         </tr>
                       ))}

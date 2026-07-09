@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SmartPayroll.Api.Data;
 using SmartPayroll.Api.Services;
 
 namespace SmartPayroll.Api.Controllers
@@ -10,7 +12,23 @@ namespace SmartPayroll.Api.Controllers
     public class PayrollController : ControllerBase
     {
         private readonly IPayrollService _payroll;
-        public PayrollController(IPayrollService payroll) { _payroll = payroll; }
+        private readonly ApplicationDbContext _db;
+
+        public PayrollController(IPayrollService payroll, ApplicationDbContext db)
+        {
+            _payroll = payroll;
+            _db = db;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var p = await _db.Payrolls
+                .Include(x => x.Employee)
+                .FirstOrDefaultAsync(x => x.PayrollId == id);
+            if (p == null) return NotFound();
+            return Ok(p);
+        }
 
         [HttpPost("generate/{employeeId}")]
         public async Task<IActionResult> GenerateForEmployee(int employeeId, [FromQuery] DateTime month)
