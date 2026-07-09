@@ -22,35 +22,35 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 min-h-screen bg-zinc-950 border-r border-zinc-800 flex flex-col justify-between text-zinc-300 select-none">
+    <aside className="w-64 min-h-screen bg-white border-r border-zinc-200/80 flex flex-col justify-between text-zinc-800 select-none font-sans shrink-0">
       <div>
         {/* Brand Header */}
-        <div className="h-20 flex items-center px-6 border-b border-zinc-900">
+        <div className="h-20 flex items-center px-6 border-b border-zinc-100">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">
+            <div className="w-8 h-8 rounded-lg bg-[#2bd97b] flex items-center justify-center font-bold text-zinc-950 shadow-sm">
               S
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-violet-400 bg-clip-text text-transparent tracking-tight">
+            <span className="text-xl font-bold text-zinc-950 tracking-tight">
               SmartPayroll
             </span>
           </div>
         </div>
 
         {/* Navigation Items */}
-        <nav className="p-4 space-y-1">
+        <nav className="p-4 space-y-1.5">
           {menuItems.map((item) => {
             const isActive = pathname.startsWith(item.href);
             return (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-200 group text-sm font-medium ${
                   isActive
-                    ? "bg-indigo-600 text-white font-medium shadow-lg shadow-indigo-600/15"
-                    : "hover:bg-zinc-900 hover:text-zinc-100"
+                    ? "bg-[#2bd97b] text-zinc-950 font-semibold shadow-sm"
+                    : "text-zinc-650 hover:bg-zinc-100 hover:text-zinc-900"
                 }`}
               >
-                <div className={`transition-transform duration-200 group-hover:scale-110 ${isActive ? "text-white" : "text-zinc-500 group-hover:text-zinc-300"}`}>
+                <div className={`transition-transform duration-200 group-hover:scale-105 ${isActive ? "text-zinc-950" : "text-zinc-400 group-hover:text-zinc-700"}`}>
                   {item.icon}
                 </div>
                 <span>{item.name}</span>
@@ -61,19 +61,19 @@ export default function Sidebar() {
       </div>
 
       {/* User Session & Logout */}
-      <div className="p-4 border-t border-zinc-900 bg-zinc-950/60 backdrop-blur-sm">
+      <div className="p-4 border-t border-zinc-100 bg-zinc-50/50">
         <div className="flex items-center gap-3 px-2 py-3 mb-3">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white font-semibold text-sm shadow">
-            DA
+          <div className="w-9 h-9 rounded-full bg-zinc-150 border border-zinc-200 flex items-center justify-center text-zinc-700 font-semibold text-sm">
+            DL
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-zinc-100 leading-tight">Deneth Lakmal</h4>
+            <h4 className="text-sm font-semibold text-zinc-900 leading-tight">Deneth Lakmal</h4>
             <span className="text-xs text-zinc-500">Administrator</span>
           </div>
         </div>
         <button
           onClick={logout}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-zinc-800 text-sm font-medium text-zinc-400 hover:text-red-400 hover:border-red-900/30 hover:bg-red-950/10 transition-all duration-200"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full border border-zinc-200 text-sm font-medium text-zinc-600 hover:text-red-600 hover:border-red-100 hover:bg-red-50/50 transition-all duration-200"
         >
           <ArrowRightOnRectangleIcon className="w-4 h-4" />
           Sign Out

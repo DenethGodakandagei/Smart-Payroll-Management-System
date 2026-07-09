@@ -26,94 +26,80 @@ export default function Dashboard() {
     {
       name: "Total Employees",
       value: loading ? "..." : employeeCount !== null ? employeeCount.toString() : "0",
-      change: "Active in database",
-      icon: <UserGroupIcon className="w-6 h-6 text-indigo-400" />,
-      bg: "from-indigo-500/10 to-indigo-600/5",
-      border: "border-indigo-500/20"
+      change: "Active registry members",
+      icon: <UserGroupIcon className="w-5 h-5 text-zinc-800" />,
     },
     {
       name: "Payrolls Generated",
       value: "1",
-      change: "This month",
-      icon: <CurrencyDollarIcon className="w-6 h-6 text-emerald-400" />,
-      bg: "from-emerald-500/10 to-emerald-600/5",
-      border: "border-emerald-500/20"
+      change: "Calculated this cycle",
+      icon: <CurrencyDollarIcon className="w-5 h-5 text-zinc-800" />,
     },
     {
       name: "System Status",
       value: "Online",
-      change: "All services running",
-      icon: <PresentationChartLineIcon className="w-6 h-6 text-violet-400" />,
-      bg: "from-violet-500/10 to-violet-600/5",
-      border: "border-violet-500/20"
+      change: "All systems healthy",
+      icon: <PresentationChartLineIcon className="w-5 h-5 text-zinc-800" />,
     }
   ];
 
   return (
-    <div className="flex bg-zinc-950 min-h-screen font-sans text-zinc-100">
+    <div className="flex bg-[#f8f9fa] min-h-screen font-sans text-zinc-800">
       <Sidebar />
       
-      <main className="flex-1 p-8 overflow-y-auto relative">
-        {/* Glow Effects */}
-        <div className="absolute top-0 right-0 w-[40%] h-[40%] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none" />
-
-        {/* Dashboard Header */}
-        <div className="flex justify-between items-center mb-8 border-b border-zinc-900 pb-5">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">Dashboard</h1>
-            <p className="text-zinc-400 text-sm mt-1">Real-time Smart Payroll system overview.</p>
-          </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-xs text-zinc-400 font-medium">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            Live Database Connected
-          </div>
+      <main className="flex-1 p-10 overflow-y-auto">
+        
+        {/* Mockup-style Greetings Header */}
+        <div className="mb-10">
+          <span className="text-zinc-400 text-sm font-semibold tracking-wide uppercase">SmartPayroll Dashboard</span>
+          <h1 className="text-4xl font-extrabold text-zinc-950 tracking-tight mt-1">Welcome Back, Deneth Lakmal.</h1>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           {stats.map((stat, idx) => (
             <div
               key={idx}
-              className={`p-6 rounded-2xl bg-gradient-to-br ${stat.bg} border ${stat.border} shadow-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl flex flex-col justify-between h-40`}
+              className="p-6 rounded-3xl bg-white border border-zinc-200/80 shadow-sm transition-all duration-200 hover:scale-[1.02] flex flex-col justify-between h-40"
             >
               <div className="flex justify-between items-start">
-                <span className="text-sm font-semibold text-zinc-400">{stat.name}</span>
-                <div className="p-2.5 rounded-xl bg-zinc-950/40 border border-zinc-800/40 shadow-inner">
+                <span className="text-sm font-bold text-zinc-500">{stat.name}</span>
+                <div className="p-2.5 rounded-xl bg-zinc-50 border border-zinc-200/60 text-zinc-700 shadow-sm">
                   {stat.icon}
                 </div>
               </div>
               <div>
-                <span className="text-3xl font-bold text-white tracking-tight leading-none block mb-1">
+                <span className="text-3xl font-extrabold text-zinc-950 tracking-tight leading-none block mb-1">
                   {stat.value}
                 </span>
-                <span className="text-xs text-zinc-500 font-medium">{stat.change}</span>
+                <span className="text-xs text-zinc-450 font-semibold">{stat.change}</span>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Admin Welcome & Action panel */}
-        <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-8 backdrop-blur-md relative overflow-hidden">
-          <div className="absolute -right-24 -bottom-24 w-72 h-72 rounded-full bg-indigo-500/5 blur-[80px]" />
-          
-          <h2 className="text-xl font-bold text-white mb-2">Welcome Back, Deneth Lakmal!</h2>
-          <p className="text-zinc-400 max-w-2xl text-sm leading-relaxed mb-6">
-            You are signed in as a system Administrator. From this control panel, you can manage active employee records, record working hours for attendance tracking, and calculate and verify monthly payroll processing.
-          </p>
+        {/* Control and Shortcuts Card */}
+        <div className="rounded-3xl border border-zinc-200/85 bg-white p-8 shadow-sm relative overflow-hidden">
+          <div className="max-w-2xl">
+            <h2 className="text-xl font-extrabold text-zinc-950 mb-2">Administrative Actions</h2>
+            <p className="text-zinc-500 text-sm leading-relaxed mb-6 font-medium">
+              Easily update employee profiles, register work hours, log attendance, and compute salaries in a few clicks. Use the links below to access the operational portals.
+            </p>
 
-          <div className="flex flex-wrap gap-4">
-            <a
-              href="/employees"
-              className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition shadow-md shadow-indigo-600/10"
-            >
-              Manage Employees
-            </a>
-            <a
-              href="/attendance"
-              className="px-5 py-2.5 rounded-xl border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-300 text-sm font-semibold transition"
-            >
-              Record Attendance
-            </a>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="/employees"
+                className="px-5 py-2.5 rounded-full bg-zinc-950 hover:bg-zinc-900 text-white text-sm font-bold transition shadow-sm"
+              >
+                Manage Employees
+              </a>
+              <a
+                href="/attendance"
+                className="px-5 py-2.5 rounded-full bg-[#2bd97b] hover:bg-[#22c55e] text-zinc-950 text-sm font-bold transition shadow-sm"
+              >
+                Record Attendance
+              </a>
+            </div>
           </div>
         </div>
 

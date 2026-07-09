@@ -31,27 +31,27 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-zinc-950 relative overflow-hidden font-sans">
-      {/* Decorative background glow blobs */}
-      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-500/10 blur-[130px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-500/10 blur-[130px] pointer-events-none" />
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#f8f9fa] relative overflow-hidden font-sans">
+      {/* Subtle green aura ambient elements */}
+      <div className="absolute top-[-10%] left-[-10%] w-[45%] h-[45%] rounded-full bg-[#2bd97b]/5 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[45%] h-[45%] rounded-full bg-emerald-500/5 blur-[120px] pointer-events-none" />
       
       <div className="max-w-md w-full mx-4 z-10">
         {/* Logo and Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 items-center justify-center font-bold text-white shadow-xl shadow-indigo-500/20 text-2xl mb-3">
+          <div className="inline-flex w-12 h-12 rounded-2xl bg-[#2bd97b] items-center justify-center font-bold text-zinc-950 shadow-sm text-2xl mb-3">
             S
           </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">SmartPayroll</h1>
-          <p className="text-zinc-400 mt-2 text-sm">Enterprise Payroll & HR Management System</p>
+          <h1 className="text-3xl font-extrabold text-zinc-950 tracking-tight">SmartPayroll</h1>
+          <p className="text-zinc-500 mt-1 text-sm font-medium">Enterprise Payroll & HR Management</p>
         </div>
 
         {/* Login Card */}
-        <div className="backdrop-blur-xl bg-zinc-900/60 border border-zinc-800 shadow-2xl rounded-3xl p-8">
-          <h2 className="text-xl font-semibold text-zinc-100 mb-6">Sign In</h2>
+        <div className="bg-white border border-zinc-200/80 shadow-sm rounded-3xl p-8">
+          <h2 className="text-xl font-bold text-zinc-900 mb-6">Sign In</h2>
           
           {err && (
-            <div className="flex gap-2 p-4 mb-5 rounded-2xl bg-red-950/20 border border-red-900/30 text-red-400 text-sm animate-fade-in">
+            <div className="flex gap-2.5 p-4 mb-5 rounded-2xl bg-red-50 border border-red-100 text-red-650 text-sm animate-fade-in font-medium">
               <InformationCircleIcon className="w-5 h-5 shrink-0" />
               <span>{err}</span>
             </div>
@@ -60,9 +60,9 @@ export default function Login() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Email Field */}
             <div>
-              <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Email Address</label>
+              <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Email Address</label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-zinc-500">
+                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-zinc-450">
                   <EnvelopeIcon className="w-5 h-5" />
                 </span>
                 <input
@@ -70,16 +70,16 @@ export default function Login() {
                   type="email"
                   required
                   placeholder="name@company.com"
-                  className="w-full bg-zinc-950/50 border border-zinc-800 text-zinc-100 placeholder-zinc-500 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-200"
+                  className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-zinc-450 focus:bg-white transition duration-200"
                 />
               </div>
             </div>
 
             {/* Password Field */}
             <div>
-              <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Password</label>
+              <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Password</label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-zinc-500">
+                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-zinc-455">
                   <KeyIcon className="w-5 h-5" />
                 </span>
                 <input
@@ -87,7 +87,7 @@ export default function Login() {
                   type="password"
                   required
                   placeholder="••••••••"
-                  className="w-full bg-zinc-950/50 border border-zinc-800 text-zinc-100 placeholder-zinc-500 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-200"
+                  className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-zinc-450 focus:bg-white transition duration-200"
                 />
               </div>
             </div>
@@ -96,7 +96,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white font-semibold text-sm rounded-2xl shadow-lg shadow-indigo-500/20 active:scale-[0.98] transition-all duration-150 disabled:opacity-50 disabled:pointer-events-none mt-2 flex items-center justify-center gap-2"
+              className="w-full py-3.5 px-4 bg-zinc-950 hover:bg-zinc-900 text-white font-bold text-sm rounded-full shadow-sm active:scale-[0.98] transition-all duration-150 disabled:opacity-50 disabled:pointer-events-none mt-2 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -107,28 +107,28 @@ export default function Login() {
           </form>
 
           {/* Quick Demo Access Credentials */}
-          <div className="mt-6 pt-5 border-t border-zinc-800/80">
+          <div className="mt-6 pt-5 border-t border-zinc-100">
             <button
               onClick={() => setShowDemo(!showDemo)}
-              className="w-full flex items-center justify-between text-xs text-zinc-500 hover:text-zinc-300 transition duration-200 focus:outline-none"
+              className="w-full flex items-center justify-between text-xs text-zinc-500 hover:text-zinc-800 transition duration-200 focus:outline-none"
             >
-              <span className="flex items-center gap-1.5 font-medium">
-                <InformationCircleIcon className="w-4 h-4 text-indigo-400" />
+              <span className="flex items-center gap-1.5 font-semibold text-zinc-550">
+                <InformationCircleIcon className="w-4 h-4 text-[#2bd97b]" />
                 Forgot your credentials? Click here for Demo Access
               </span>
               {showDemo ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />}
             </button>
 
             {showDemo && (
-              <div className="mt-3 p-3.5 bg-zinc-950/40 border border-zinc-800/60 rounded-2xl text-xs text-zinc-400 space-y-2 animate-slide-down">
+              <div className="mt-3 p-3.5 bg-zinc-50 border border-zinc-200/80 rounded-2xl text-xs text-zinc-650 space-y-2 animate-slide-down">
                 <p>Use the database administrator account below to sign in:</p>
-                <div className="grid grid-cols-3 gap-1 items-center bg-zinc-900/60 p-2 rounded-xl border border-zinc-800/40">
-                  <span className="text-zinc-500 font-medium">Email:</span>
-                  <span className="col-span-2 text-zinc-200 font-mono select-all">contact.deneth@gmail.com</span>
+                <div className="grid grid-cols-3 gap-1 items-center bg-white p-2 rounded-xl border border-zinc-200/60">
+                  <span className="text-zinc-450 font-semibold">Email:</span>
+                  <span className="col-span-2 text-zinc-800 font-mono select-all">contact.deneth@gmail.com</span>
                 </div>
-                <div className="grid grid-cols-3 gap-1 items-center bg-zinc-900/60 p-2 rounded-xl border border-zinc-800/40">
-                  <span className="text-zinc-500 font-medium">Password:</span>
-                  <span className="col-span-2 text-zinc-200 font-mono select-all">12345</span>
+                <div className="grid grid-cols-3 gap-1 items-center bg-white p-2 rounded-xl border border-zinc-200/60">
+                  <span className="text-zinc-450 font-semibold">Password:</span>
+                  <span className="col-span-2 text-zinc-800 font-mono select-all">12345</span>
                 </div>
               </div>
             )}
