@@ -24,13 +24,19 @@ namespace SmartPayroll.Api.Services
 
         public async Task<Employee> Register(CreateEmployeeDto dto)
         {
+            var existing = await _db.Employees.AnyAsync(e => e.Email == dto.Email);
+            if (existing)
+            {
+                throw new InvalidOperationException("An employee with this email is already registered.");
+            }
+
             var hashed = CreatePasswordHash(dto.Password);
             var emp = new Employee
             {
                 FullName = dto.FullName,
                 Email = dto.Email,
                 Nic = dto.Nic,           
-        MemberNo = dto.MemberNo, 
+                MemberNo = dto.MemberNo, 
                 BasicSalary = dto.BasicSalary,
                 BankAccountNo = dto.BankAccountNo,
                 Designation = dto.Designation,

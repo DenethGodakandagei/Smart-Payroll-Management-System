@@ -20,8 +20,15 @@ namespace SmartPayroll.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] CreateEmployeeDto dto)
         {
-            var user = await _auth.Register(dto);
-            return Ok(new { user.EmployeeId, user.Email });
+            try
+            {
+                var user = await _auth.Register(dto);
+                return Ok(new { user.EmployeeId, user.Email });
+            }
+            catch (System.InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("login")]
