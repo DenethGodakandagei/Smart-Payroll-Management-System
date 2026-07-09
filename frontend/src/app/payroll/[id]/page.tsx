@@ -5,7 +5,15 @@ import { useParams, useRouter } from "next/navigation";
 import api from "../../lib/api";
 import dayjs from "dayjs";
 import Sidebar from "@/app/components/Sidebar";
-import { ArrowLeftIcon, PrinterIcon, ShieldCheckIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
+import { 
+  ArrowLeftIcon, 
+  PrinterIcon, 
+  ShieldCheckIcon, 
+  DocumentTextIcon, 
+  PaperAirplaneIcon,
+  CheckCircleIcon,
+  InformationCircleIcon
+} from "@heroicons/react/24/outline";
 
 export default function PayslipPage() {
   const params = useParams();
@@ -13,6 +21,11 @@ export default function PayslipPage() {
   const [payroll, setPayroll] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Email States
+  const [emailSending, setEmailSending] = useState(false);
+  const [emailSuccess, setEmailSuccess] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!params?.id) return;
@@ -34,6 +47,24 @@ export default function PayslipPage() {
     window.print();
   };
 
+  const handleSendEmail = async () => {
+    if (!params?.id) return;
+    setEmailSending(true);
+    setEmailSuccess(null);
+    setEmailError(null);
+    try {
+      await api.post(`/payroll/${params.id}/email`);
+      setEmailSuccess("Payslip email generated and dispatched successfully!");
+      setTimeout(() => setEmailSuccess(null), 5000);
+    } catch (err: any) {
+      console.error(err);
+      setEmailError(err.response?.data?.message || "Failed to dispatch email. Check SMTP settings.");
+      setTimeout(() => setEmailError(null), 5000);
+    } finally {
+      setEmailSending(false);
+    }
+  };
+
   return (
     <div className="flex bg-[#f8f9fa] min-h-screen font-sans text-zinc-800 print:bg-white print:text-black">
       {/* Hide sidebar during printing */}
@@ -48,7 +79,7 @@ export default function PayslipPage() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => router.push("/payroll")}
-              className="p-2.5 rounded-full border border-zinc-200 bg-white text-zinc-550 hover:text-zinc-900 hover:bg-zinc-50 transition duration-150 shadow-sm"
+              className="p-2.5 rounded-full border border-zinc-200 bg-white text-zinc-555 hover:text-zinc-900 hover:bg-zinc-50 transition duration-150 shadow-sm"
             >
               <ArrowLeftIcon className="w-5 h-5 stroke-[2]" />
             </button>
@@ -58,14 +89,44 @@ export default function PayslipPage() {
             </div>
           </div>
           
-          <button
-            onClick={handlePrint}
-            className="flex items-center gap-1.5 px-5 py-2.5 bg-zinc-950 hover:bg-zinc-900 text-white text-sm font-bold rounded-full shadow-sm transition-all active:scale-[0.98]"
-          >
-            <PrinterIcon className="w-4 h-4 stroke-[2.5]" />
-            Print Payslip
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={handleSendEmail}
+              disabled={emailSending}
+              className="flex items-center gap-1.5 px-5 py-2.5 bg-white border border-zinc-200 hover:border-zinc-300 text-zinc-800 text-sm font-bold rounded-full shadow-sm transition-all active:scale-[0.98] disabled:opacity-50"
+            >
+              {emailSending ? (
+                <div className="w-4 h-4 border-2 border-zinc-800/30 border-t-zinc-800 rounded-full animate-spin" />
+              ) : (
+                <>
+                  <PaperAirplaneIcon className="w-4 h-4 stroke-[2.5]" />
+                  Email Payslip
+                </>
+              )}
+            </button>
+            <button
+              onClick={handlePrint}
+              className="flex items-center gap-1.5 px-5 py-2.5 bg-zinc-950 hover:bg-zinc-900 text-white text-sm font-bold rounded-full shadow-sm transition-all active:scale-[0.98]"
+            >
+              <PrinterIcon className="w-4 h-4 stroke-[2.5]" />
+              Print Payslip
+            </button>
+          </div>
         </div>
+
+        {/* Email Alerts Banners */}
+        {emailSuccess && (
+          <div className="max-w-2xl mx-auto flex gap-2.5 p-4 mb-4 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm font-medium print:hidden">
+            <CheckCircleIcon className="w-5 h-5 shrink-0" />
+            <span>{emailSuccess}</span>
+          </div>
+        )}
+        {emailError && (
+          <div className="max-w-2xl mx-auto flex gap-2.5 p-4 mb-4 rounded-2xl bg-red-50 border border-red-100 text-red-650 text-sm font-medium print:hidden">
+            <InformationCircleIcon className="w-5 h-5 shrink-0" />
+            <span>{emailError}</span>
+          </div>
+        )}
 
         {/* Detailed Payslip Container */}
         {loading ? (
@@ -77,7 +138,7 @@ export default function PayslipPage() {
           <div className="max-w-md mx-auto text-center py-20 bg-white rounded-3xl border border-zinc-200 p-6 shadow-sm print:hidden">
             <DocumentTextIcon className="w-12 h-12 text-zinc-400 mx-auto mb-3" />
             <h2 className="text-lg font-bold text-zinc-800">Payslip Not Found</h2>
-            <p className="text-zinc-500 text-sm mt-1 mb-4 font-medium">{error || "Could not find requested payroll log."}</p>
+            <p className="text-zinc-550 text-xs mt-1 mb-4 font-semibold">{error || "Could not find requested payroll log."}</p>
             <button onClick={() => router.push("/payroll")} className="px-4 py-2 bg-zinc-950 text-white rounded-full text-sm font-bold">
               Back to Payroll
             </button>
