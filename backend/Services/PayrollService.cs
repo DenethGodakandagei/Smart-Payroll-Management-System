@@ -53,21 +53,38 @@ namespace SmartPayroll.Api.Services
 
             decimal net = gross - (epf + etf + tax);
 
-            var payroll = new Payroll
-            {
-                EmployeeId = emp.EmployeeId,
-                MonthYear = monthYear.Date,
-                BasicPay = basic,
-                OtPay = otPay,
-                GrossSalary = gross,
-                Epf = epf,
-                Etf = etf,
-                Tax = tax,
-                NetSalary = net,
-                IsFinalized = false
-            };
+            var payroll = await _db.Payrolls
+                .FirstOrDefaultAsync(p => p.EmployeeId == employeeId && p.MonthYear == monthYear.Date);
 
-            _db.Payrolls.Add(payroll);
+            if (payroll != null)
+            {
+                payroll.BasicPay = basic;
+                payroll.OtPay = otPay;
+                payroll.GrossSalary = gross;
+                payroll.Epf = epf;
+                payroll.Etf = etf;
+                payroll.Tax = tax;
+                payroll.NetSalary = net;
+                payroll.CreatedAt = DateTime.UtcNow;
+            }
+            else
+            {
+                payroll = new Payroll
+                {
+                    EmployeeId = emp.EmployeeId,
+                    MonthYear = monthYear.Date,
+                    BasicPay = basic,
+                    OtPay = otPay,
+                    GrossSalary = gross,
+                    Epf = epf,
+                    Etf = etf,
+                    Tax = tax,
+                    NetSalary = net,
+                    IsFinalized = false
+                };
+                _db.Payrolls.Add(payroll);
+            }
+
             await _db.SaveChangesAsync();
             return payroll;
         }
